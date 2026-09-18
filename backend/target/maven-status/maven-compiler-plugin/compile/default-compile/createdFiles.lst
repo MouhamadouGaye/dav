@@ -4,7 +4,9 @@ com/digitalassetvault/DigitalAssetVaultApplication.class
 com/digitalassetvault/repository/WalletRepository.class
 com/digitalassetvault/controller/WalletController.class
 com/digitalassetvault/controller/HealthController.class
-com/digitalassetvault/service/WalletService.class
 com/digitalassetvault/controller/dto/WalletResponse.class
 com/digitalassetvault/service/WalletValidator.class
+com/digitalassetvault/exception/WalletNotFoundException.class
 com/digitalassetvault/exception/GlobalExceptionHandler.class
+com/digitalassetvault/service/WalletService.class
+com/digitalassetvault/config/WebConfig.class

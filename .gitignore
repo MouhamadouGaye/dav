@@ -11,7 +11,7 @@ backend/target/
 frontend/node_modules/
 frontend/.next/
 frontend/out/
-
+frontend/file.txt
 # OS / IDE
 .DS_Store
 .idea/
@@ -19,3 +19,6 @@ frontend/out/
 
 # Logs
 *.log
+
+.env
+env

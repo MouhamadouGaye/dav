@@ -1,4 +1,6 @@
 com/digitalassetvault/service/WalletValidatorTest.class
 com/digitalassetvault/exception/GlobalExceptionHandlerTest.class
+com/digitalassetvault/controller/WalletControllerIntegrationTest.class
 com/digitalassetvault/service/WalletServiceTest.class
 com/digitalassetvault/controller/WalletControllerTest.class
+com/digitalassetvault/repository/WalletRepositoryIntegrationTest.class

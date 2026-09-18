@@ -1,24 +1,107 @@
+# services:
+#   postgres:
+#     image: postgres:17
+#     container_name: digital-asset-vault-postgres
+
+#     environment:
+#       POSTGRES_DB: ${POSTGRES_DB}
+#       POSTGRES_USER: ${PASTGRES_USER}
+#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+#     ports:
+#       - "5433:5432"
+
+#     volumes:
+#       - digital_asset_vault_pgdata:/var/lib/postgresql/data
+    
+
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_PASSWORD}"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 10
+
+# volumes:
+#   digital_asset_vault_pgdata:
+
 services:
-  postgres:
-    image: postgres:17
-    container_name: digital-asset-vault-postgres
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: digital-asset-vault-backend
 
     environment:
+      POSTGRES_HOST: host.docker.internal
+      POSTGRES_PORT: 5432
       POSTGRES_DB: digital_asset_vault
-      POSTGRES_USER: dav
-      POSTGRES_PASSWORD: dav_dev_password
+      POSTGRES_USER: gaye
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      BACKEND_PORT: 8081
 
-    ports:
-      - "5433:5432"
+    expose:
+      - "8081"
 
-    volumes:
-      - digital_asset_vault_pgdata:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dav -d digital_asset_vault"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+    networks:
+      - digital-asset-vault
+      - homelab_internal
 
-volumes:
-  digital_asset_vault_pgdata:
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=homelab_internal"
+
+    #   - "traefik.http.routers.digital-asset-vault-api.rule=Host(`api.digital-asset-vault.localhost`)"
+    #   - "traefik.http.routers.digital-asset-vault-api.entrypoints=web"
+
+    #   - "traefik.http.services.digital-asset-vault-api.loadbalancer.server.port=8081"
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=homelab_internal"
+      - "traefik.http.routers.digital-asset-vault-api.rule=Host(`api.digital-asset-vault.localhost`)"
+      - "traefik.http.routers.digital-asset-vault-api.entrypoints=websecure"
+      - "traefik.http.routers.digital-asset-vault-api.tls=true"
+      - "traefik.http.services.digital-asset-vault-api.loadbalancer.server.port=8081"
+
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: digital-asset-vault-frontend
+
+    expose:
+      - "3000"
+    
+    environment:
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+
+    depends_on:
+      - backend
+
+    networks:
+      - digital-asset-vault
+      - homelab_internal
+
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=homelab_internal"
+      - "traefik.http.routers.digital-asset-vault.rule=Host(`digital-asset-vault.localhost`)"
+      - "traefik.http.routers.digital-asset-vault.entrypoints=websecure"
+      - "traefik.http.routers.digital-asset-vault.tls=true"
+      - "traefik.http.services.digital-asset-vault.loadbalancer.server.port=3000"
+
+
+networks:
+  digital-asset-vault:
+    driver: bridge
+
+  homelab_internal:
+    external: true

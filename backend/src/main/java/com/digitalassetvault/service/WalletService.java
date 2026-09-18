@@ -2,6 +2,7 @@ package com.digitalassetvault.service;
 
 import com.digitalassetvault.domain.Wallet;
 import com.digitalassetvault.repository.WalletRepository;
+import com.digitalassetvault.exception.WalletNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -24,6 +25,11 @@ public class WalletService {
 
     public List<Wallet> findAll() {
         return walletRepository.findAll();
+    }
+
+    public Wallet findById(UUID id) {
+        return walletRepository.findById(id)
+                .orElseThrow(() -> new WalletNotFoundException(id));
     }
 
     public Wallet create(
