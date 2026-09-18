@@ -1,0 +1,50 @@
+  backend mvn -version
+Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
+Maven home: /opt/homebrew/Cellar/maven/3.9.9/libexec
+Java version: 21.0.3, vendor: Eclipse Adoptium, runtime: /Users/gaye/.sdkman/candidates/java/21.0.3-tem
+Default locale: fr_FR, platform encoding: UTF-8
+OS name: "mac os x", version: "15.0.1", arch: "aarch64", family: "mac"
+➜  backend sdk current java
+Using java version 21.0.3-tem
+➜  backend openjdk version "21.0.3"
+zsh: command not found: openjdk
+➜  backend echo $JAVA_HOME
+/Users/gaye/.sdkman/candidates/java/current
+➜  backend sdk use java 21.0.3-tem
+
+Using java version 21.0.3-tem in this shell.
+➜  backend 
+
+
+
+backend nano ~/.zshrc
+➜  backend export JAVA_HOME="$HOME/.sdkman/candidates/java/current"
+export PATH="$JAVA_HOME/bin:$PATH"
+➜  backend source ~/.zshrc
+➜  backend sdk use java 21.0.3-tem
+
+Using java version 21.0.3-tem in this shell.
+➜  backend which java
+java -version
+echo $JAVA_HOME
+/Users/gaye/.sdkman/candidates/java/21.0.3-tem/bin/java
+openjdk version "21.0.3" 2024-04-16 LTS
+OpenJDK Runtime Environment Temurin-21.0.3+9 (build 21.0.3+9-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.3+9 (build 21.0.3+9-LTS, mixed mode)
+/Users/gaye/.sdkman/candidates/java/21.0.3-tem
+➜  backend mvn -version
+Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
+Maven home: /opt/homebrew/Cellar/maven/3.9.9/libexec
+Java version: 21.0.3, vendor: Eclipse Adoptium, runtime: /Users/gaye/.sdkman/candidates/java/21.0.3-tem
+Default locale: fr_FR, platform encoding: UTF-8
+OS name: "mac os x", version: "15.0.1", arch: "aarch64", family: "mac"
+➜  backend 
+
+
+
+curl -L "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=3.5.5&baseDir=.&groupId=com.digitalassetvault&artifactId=digital-asset-vault&name=digital-asset-vault&description=Institutional%20Digital%20Asset%20Vault&packageName=com.digitalassetvault&packaging=jar&javaVersion=21&dependencies=web,actuator,validation,data-jpa,postgresql,flyway" -o backend.zip
+
+unzip backend.zip
+rm backend.zip
+
+file backend.zip

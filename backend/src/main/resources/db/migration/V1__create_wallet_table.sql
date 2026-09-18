@@ -1,0 +1,9 @@
+CREATE TABLE wallet (
+    id UUID PRIMARY KEY,
+    address VARCHAR(255) NOT NULL UNIQUE,
+    blockchain VARCHAR(50) NOT NULL,
+    key_reference VARCHAR(255) NOT NULL UNIQUE,
+    status VARCHAR(30) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL
+);

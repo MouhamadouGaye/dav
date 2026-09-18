@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: digital-asset-vault
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/digital_asset_vault
+    username: dav
+    password: dav_dev_password
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

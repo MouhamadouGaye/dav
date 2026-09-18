@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: digital-asset-vault-postgres
+
+    environment:
+      POSTGRES_DB: digital_asset_vault
+      POSTGRES_USER: dav
+      POSTGRES_PASSWORD: dav_dev_password
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - digital_asset_vault_pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dav -d digital_asset_vault"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  digital_asset_vault_pgdata:
