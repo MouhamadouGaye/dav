@@ -1,7 +1,10 @@
 com/digitalassetvault/domain/Wallet.class
+com/digitalassetvault/controller/dto/WalletCreateRequest.class
 com/digitalassetvault/DigitalAssetVaultApplication.class
 com/digitalassetvault/repository/WalletRepository.class
 com/digitalassetvault/controller/WalletController.class
 com/digitalassetvault/controller/HealthController.class
 com/digitalassetvault/service/WalletService.class
-com/digitalassetvault/controller/WalletController$CreateWalletRequest.class
+com/digitalassetvault/controller/dto/WalletResponse.class
+com/digitalassetvault/service/WalletValidator.class
+com/digitalassetvault/exception/GlobalExceptionHandler.class

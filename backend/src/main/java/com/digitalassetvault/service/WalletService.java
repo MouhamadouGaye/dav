@@ -12,9 +12,14 @@ import java.util.UUID;
 public class WalletService {
 
     private final WalletRepository walletRepository;
+    private final WalletValidator walletValidator;
 
-    public WalletService(WalletRepository walletRepository) {
+    public WalletService(
+            WalletRepository walletRepository,
+            WalletValidator walletValidator) {
+
         this.walletRepository = walletRepository;
+        this.walletValidator = walletValidator;
     }
 
     public List<Wallet> findAll() {
@@ -25,6 +30,11 @@ public class WalletService {
             String address,
             String blockchain,
             String keyReference) {
+
+        walletValidator.validate(
+                address,
+                blockchain,
+                keyReference);
 
         OffsetDateTime now = OffsetDateTime.now();
 
