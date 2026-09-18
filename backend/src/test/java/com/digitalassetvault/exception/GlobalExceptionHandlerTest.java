@@ -9,38 +9,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GlobalExceptionHandlerTest {
 
-    private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
+        private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
-    @Test
-    void shouldReturnConflictForDataIntegrityViolation() {
+        @Test
+        void shouldReturnConflictForDataIntegrityViolation() {
 
-        DataIntegrityViolationException exception = new DataIntegrityViolationException("duplicate key");
+                DataIntegrityViolationException exception = new DataIntegrityViolationException("duplicate key");
 
-        Map<String, Object> response = handler.handleDataIntegrityViolation(exception);
+                Map<String, Object> response = handler.handleDataIntegrityViolation(exception);
 
-        assertEquals(409, response.get("status"));
-        assertEquals(
-                "RESOURCE_CONFLICT",
-                response.get("error"));
-        assertEquals(
-                "Wallet already exists",
-                response.get("message"));
-    }
+                assertEquals(409, response.get("status"));
+                assertEquals(
+                                "RESOURCE_CONFLICT",
+                                response.get("error"));
+                assertEquals(
+                                "Wallet already exists",
+                                response.get("message"));
+        }
 
-    @Test
-    void shouldReturnBadRequestForBusinessValidation() {
+        @Test
+        void shouldReturnBadRequestForBusinessValidation() {
 
-        IllegalArgumentException exception = new IllegalArgumentException(
-                "Invalid Ethereum address");
+                IllegalArgumentException exception = new IllegalArgumentException(
+                                "Invalid Ethereum address");
 
-        Map<String, Object> response = handler.handleBusinessValidationException(exception);
+                Map<String, Object> response = handler.handleBusinessValidationException(exception);
 
-        assertEquals(400, response.get("status"));
-        assertEquals(
-                "BUSINESS_VALIDATION_ERROR",
-                response.get("error"));
-        assertEquals(
-                "Invalid Ethereum address",
-                response.get("message"));
-    }
+                assertEquals(400, response.get("status"));
+                assertEquals(
+                                "BUSINESS_VALIDATION_ERROR",
+                                response.get("error"));
+                assertEquals(
+                                "Invalid Ethereum address",
+                                response.get("message"));
+        }
 }

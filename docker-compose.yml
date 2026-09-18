@@ -1,30 +1,33 @@
-# services:
-#   postgres:
-#     image: postgres:17
-#     container_name: digital-asset-vault-postgres
+services:
 
-#     environment:
-#       POSTGRES_DB: ${POSTGRES_DB}
-#       POSTGRES_USER: ${PASTGRES_USER}
-#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  postgres:
+    image: postgres:17
+    container_name: digital-asset-vault-postgres
 
-#     ports:
-#       - "5433:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-#     volumes:
-#       - digital_asset_vault_pgdata:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_HOST_PORT}:5432"
+
+    volumes:
+      - digital_asset_vault_pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    networks:
+      - digital-asset-vault
+
     
 
-#     healthcheck:
-#       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_PASSWORD}"]
-#       interval: 5s
-#       timeout: 5s
-#       retries: 10
 
-# volumes:
-#   digital_asset_vault_pgdata:
 
-services:
   backend:
     build:
       context: ./backend
@@ -33,18 +36,19 @@ services:
     container_name: digital-asset-vault-backend
 
     environment:
-      POSTGRES_HOST: host.docker.internal
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB: digital_asset_vault
-      POSTGRES_USER: gaye
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       BACKEND_PORT: 8081
 
-    expose:
-      - "8081"
+    ports:
+      - "8081:8081"
 
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
     networks:
       - digital-asset-vault
@@ -53,18 +57,17 @@ services:
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.docker.network=homelab_internal"
-
     #   - "traefik.http.routers.digital-asset-vault-api.rule=Host(`api.digital-asset-vault.localhost`)"
-    #   - "traefik.http.routers.digital-asset-vault-api.entrypoints=web"
-
+    #   - "traefik.http.routers.digital-asset-vault-api.entrypoints=websecure"
+    #   - "traefik.http.routers.digital-asset-vault-api.tls=true"
     #   - "traefik.http.services.digital-asset-vault-api.loadbalancer.server.port=8081"
-
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=homelab_internal"
-      - "traefik.http.routers.digital-asset-vault-api.rule=Host(`api.digital-asset-vault.localhost`)"
+      - "traefik.http.routers.digital-asset-vault-api.rule=Host(`api.digital-asset-vault.mouhamadougaye.com`)"
       - "traefik.http.routers.digital-asset-vault-api.entrypoints=websecure"
       - "traefik.http.routers.digital-asset-vault-api.tls=true"
+      - "traefik.http.routers.digital-asset-vault-api.tls.certresolver=letsencrypt"
       - "traefik.http.services.digital-asset-vault-api.loadbalancer.server.port=8081"
 
 
@@ -72,12 +75,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.digital-asset-vault.localhost
 
     container_name: digital-asset-vault-frontend
 
     expose:
       - "3000"
-    
+
     environment:
       HOSTNAME: 0.0.0.0
       PORT: 3000
@@ -89,15 +94,27 @@ services:
       - digital-asset-vault
       - homelab_internal
 
-
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=homelab_internal"
+    #   - "traefik.http.routers.digital-asset-vault.rule=Host(`digital-asset-vault.localhost`)"
+    #   - "traefik.http.routers.digital-asset-vault.entrypoints=websecure"
+    #   - "traefik.http.routers.digital-asset-vault.tls=true"
+    #   - "traefik.http.services.digital-asset-vault.loadbalancer.server.port=3000"
     labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=homelab_internal"
-      - "traefik.http.routers.digital-asset-vault.rule=Host(`digital-asset-vault.localhost`)"
-      - "traefik.http.routers.digital-asset-vault.entrypoints=websecure"
-      - "traefik.http.routers.digital-asset-vault.tls=true"
-      - "traefik.http.services.digital-asset-vault.loadbalancer.server.port=3000"
+    - "traefik.enable=true"
+    - "traefik.docker.network=homelab_internal"
+    - "traefik.http.routers.digital-asset-vault.rule=Host(`digital-asset-vault.mouhamadougaye.com`)"
+    - "traefik.http.routers.digital-asset-vault.entrypoints=websecure"
+    - "traefik.http.routers.digital-asset-vault.tls=true"
+    - "traefik.http.routers.digital-asset-vault.tls.certresolver=letsencrypt"
+    - "traefik.http.services.digital-asset-vault.loadbalancer.server.port=3000"
 
+
+# networks:
+#   digital-asset-vault:
+#     driver: bridge
+#     name: traefik_internal   # ← le vrai nom, à adapter
 
 networks:
   digital-asset-vault:
@@ -105,3 +122,8 @@ networks:
 
   homelab_internal:
     external: true
+    name: traefik_internal
+
+
+volumes:
+  digital_asset_vault_pgdata:

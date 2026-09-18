@@ -28,9 +28,9 @@ spring:
     name: digital-asset-vault
 
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:host.docker.internal}:${POSTGRES_PORT:5432}/${POSTGRES_DB:digital_asset_vault}
-    username: ${POSTGRES_USER:gaye}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST:host.docker.internal}:${POSTGRES_PORT:5433}/${POSTGRES_DB:digital_asset_vault}
+    username: ${POSTGRES_USER:dav}
+    password: ${POSTGRES_PASSWORD:Dav.2424}
 
   jpa:
     hibernate:
