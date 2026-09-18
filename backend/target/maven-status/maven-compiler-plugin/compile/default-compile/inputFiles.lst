@@ -1,2 +1,6 @@
 /Users/gaye/Desktop/sep2026/digital-asset-vault/backend/src/main/java/com/digitalassetvault/DigitalAssetVaultApplication.java
 /Users/gaye/Desktop/sep2026/digital-asset-vault/backend/src/main/java/com/digitalassetvault/controller/HealthController.java
+/Users/gaye/Desktop/sep2026/digital-asset-vault/backend/src/main/java/com/digitalassetvault/controller/WalletController.java
+/Users/gaye/Desktop/sep2026/digital-asset-vault/backend/src/main/java/com/digitalassetvault/domain/Wallet.java
+/Users/gaye/Desktop/sep2026/digital-asset-vault/backend/src/main/java/com/digitalassetvault/repository/WalletRepository.java
+/Users/gaye/Desktop/sep2026/digital-asset-vault/backend/src/main/java/com/digitalassetvault/service/WalletService.java

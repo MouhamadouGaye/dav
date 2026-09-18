@@ -1,24 +1,24 @@
-spring:
-  application:
-    name: digital-asset-vault
+services:
+  postgres:
+    image: postgres:17
+    container_name: digital-asset-vault-postgres
 
-  datasource:
-    url: jdbc:postgresql://localhost:5433/digital_asset_vault
-    username: dav
-    password: dav_dev_password
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-  jpa:
-    hibernate:
-      ddl-auto: validate
+    ports:
+      - "${POSTGRES_HOST_PORT}:5432"
 
-  flyway:
-    enabled: true
+    volumes:
+      - digital_asset_vault_pgdata:/var/lib/postgresql/data
 
-server:
-  port: 8081
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
+volumes:
+  digital_asset_vault_pgdata:
